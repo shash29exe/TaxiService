@@ -1,0 +1,15 @@
+# ▶️ Python bytecode
+pycache/
+*.py[cod]
+*.pyo
+*.pyd
+
+# ▶️ Virtual environments
+.venv/
+.idea/
+.env
+.env.docker
+
+# ▶️ Md and CSV
+*.md
+!README.md
