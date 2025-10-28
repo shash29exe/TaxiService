@@ -1,5 +1,5 @@
 from aiogram.types import KeyboardButton
-from aiogram.utils.keyboard import ReplyKeyboardMarkup
+from aiogram.utils.keyboard import ReplyKeyboardMarkup, ReplyKeyboardBuilder
 
 
 def get_id_kb():
@@ -33,4 +33,8 @@ def contact_admin():
         Кнопка связи с администратором.
     """
 
-    pass
+    builder = ReplyKeyboardBuilder()
+    builder.button(text="💬 Связаться с менеджером")
+    builder.adjust(1)
+
+    return builder.as_markup(resize_keyboard=True)
