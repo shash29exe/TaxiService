@@ -28,7 +28,7 @@ def driver_menu():
     pass
 
 
-def contact_admin():
+def contact_admin_kb():
     """
         Кнопка связи с администратором.
     """
