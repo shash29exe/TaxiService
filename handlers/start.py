@@ -1,7 +1,7 @@
 from aiogram.types import Message
 from aiogram import F, Router
 
-from keyboards.reply import get_id_kb, driver_menu, admin_menu, contact_admin_kb
+from keyboards.reply import get_id_kb, driver_menu_kb, admin_menu_kb, contact_admin_kb
 from utils.auth import check_admin, check_drivers, get_admin_id
 
 router = Router()
@@ -27,10 +27,10 @@ async def get_id(message: Message):
     user_id = message.from_user.id
 
     if check_admin(user_id):
-        await message.answer("Привет, admin.", reply_markup=admin_menu())
+        await message.answer("Привет, admin.", reply_markup=admin_menu_kb())
 
     elif check_drivers(user_id):
-        await message.answer("Привет, водитель.", reply_markup=driver_menu())
+        await message.answer("Привет, водитель.", reply_markup=driver_menu_kb())
 
     else:
         tg_id = message.from_user.id
