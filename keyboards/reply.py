@@ -58,4 +58,10 @@ def income_menu_kb():
         Меню доходов
     """
 
-    pass
+    builder = ReplyKeyboardBuilder()
+    builder.button(text="Оплата за заказ")
+    builder.button(text="Доплата за заказ")
+    builder.button(text="🔙 Назад")
+    builder.adjust(2, 1)
+
+    return builder.as_markup(resize_keyboard=True)
