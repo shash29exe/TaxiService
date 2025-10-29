@@ -12,20 +12,33 @@ def get_id_kb():
     )
 
 
-def admin_menu():
+def admin_menu_kb():
     """
         Меню администратора.
     """
 
-    pass
+    builder = ReplyKeyboardBuilder()
+    builder.button(text='Сводный отчёт')
+    builder.button(text='Выгрузка')
+    builder.button(text='Добавить водителя')
+    builder.button(text='Удалить водителя')
+    builder.adjust(2, 2)
+
+    return builder.as_markup(resize_keyboard=True)
 
 
-def driver_menu():
+def driver_menu_kb():
     """
         Меню водителя.
     """
 
-    pass
+    builder = ReplyKeyboardBuilder()
+    builder.button(text='Доход')
+    builder.button(text='Расход')
+    builder.button(text='Отчёт')
+    builder.adjust(1, 1, 1)
+
+    return builder.as_markup(resize_keyboard=True)
 
 
 def contact_admin_kb():
@@ -38,3 +51,11 @@ def contact_admin_kb():
     builder.adjust(1)
 
     return builder.as_markup(resize_keyboard=True)
+
+
+def income_menu_kb():
+    """
+        Меню доходов
+    """
+
+    pass
