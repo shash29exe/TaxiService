@@ -65,3 +65,14 @@ def income_menu_kb():
     builder.adjust(2, 1)
 
     return builder.as_markup(resize_keyboard=True)
+
+
+def back_button_kb():
+    """
+        Кнопка шаг назад
+    """
+
+    builder = ReplyKeyboardBuilder()
+    builder.button(text="Назад 🔙")
+
+    return builder.as_markup(resize_keyboard=True)
