@@ -1,9 +1,10 @@
 from aiogram import Router, F
+from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
-from aiogram.fsm.context import FSMContext
 
 from keyboards.reply import income_menu_kb, back_button_kb
+from services.google_sheets import add_record
 
 router = Router()
 
@@ -62,8 +63,39 @@ async def ask_income_comment(message: Message, state: FSMContext):
 @router.message(F.text == 'Назад 🔙')
 async def back_one_step(message: Message, state: FSMContext):
     """
-        Возврат в меню дохода
+        Возврат в меню дохода.
     """
 
     await state.clear()
     await message.answer('Выберите тип дохода', reply_markup=income_menu_kb())
+
+
+@router.message(IncomeStates.waiting_for_comment)
+async def confirm_income(message: Message, state: FSMContext):
+    """
+        Подтверждение доходов.
+    """
+
+    user_data = await state.get_data()
+    income_type = user_data['income_type']
+    amount = user_data['amount']
+    comment = message.text
+
+    subcategory = 'оплата' if income_type == 'Оплата за заказ' else 'доплата'
+
+    add_record(
+        user_id = message.from_user.id,
+        username = message.from_user.full_name,
+        record_type = 'доход',
+        subcategory = subcategory,
+        amount = amount,
+        comment = comment
+    )
+
+    await message.answer(
+        f'Доход зарегистрирован\nТип дохода: {income_type}\nСумма: {amount:.2f}₽\nКоментарий: {comment}',
+        reply_markup=income_menu_kb()
+    )
+
+    await state.clear()
+
