@@ -56,18 +56,9 @@ async def ask_income_comment(message: Message, state: FSMContext):
         return
 
     await state.update_data(amount=amount)
-    await message.answer('Добавьте коментарий\nПример:\n`Адрес заказа: Просп. Победы 01`', parse_mode='Markdown', reply_markup=back_button_kb())
+    await message.answer('Добавьте коментарий\nПример:\n`Адрес заказа: Просп. Победы 01`', parse_mode='Markdown',
+                         reply_markup=back_button_kb())
     await state.set_state(IncomeStates.waiting_for_comment)
-
-
-@router.message(F.text == 'Назад 🔙')
-async def back_one_step(message: Message, state: FSMContext):
-    """
-        Возврат в меню дохода.
-    """
-
-    await state.clear()
-    await message.answer('Выберите тип дохода', reply_markup=income_menu_kb())
 
 
 @router.message(IncomeStates.waiting_for_comment)
@@ -84,12 +75,12 @@ async def confirm_income(message: Message, state: FSMContext):
     subcategory = 'оплата' if income_type == 'Оплата за заказ' else 'доплата'
 
     add_record(
-        user_id = message.from_user.id,
-        username = message.from_user.full_name,
-        record_type = 'доход',
-        subcategory = subcategory,
-        amount = amount,
-        comment = comment
+        user_id=message.from_user.id,
+        username=message.from_user.full_name,
+        record_type='доход',
+        subcategory=subcategory,
+        amount=amount,
+        comment=comment
     )
 
     await message.answer(
@@ -99,3 +90,12 @@ async def confirm_income(message: Message, state: FSMContext):
 
     await state.clear()
 
+
+@router.message(F.text == 'Назад 🔙')
+async def back_one_step(message: Message, state: FSMContext):
+    """
+        Возврат в меню дохода.
+    """
+
+    await state.clear()
+    await message.answer('Выберите тип дохода', reply_markup=income_menu_kb())
