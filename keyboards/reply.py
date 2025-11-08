@@ -55,7 +55,7 @@ def contact_admin_kb():
 
 def income_menu_kb():
     """
-        Меню доходов
+        Меню доходов.
     """
 
     builder = ReplyKeyboardBuilder()
@@ -69,10 +69,21 @@ def income_menu_kb():
 
 def back_button_kb():
     """
-        Кнопка шаг назад
+        Кнопка шаг назад.
     """
 
     builder = ReplyKeyboardBuilder()
     builder.button(text="Назад 🔙")
+
+    return builder.as_markup(resize_keyboard=True)
+
+
+def back_to_driver_kb():
+    """
+        Кнопка назад в меню водителя.
+    """
+
+    builder = ReplyKeyboardBuilder()
+    builder.button(text='🔙 Назад в меню')
 
     return builder.as_markup(resize_keyboard=True)
