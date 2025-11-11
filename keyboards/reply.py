@@ -87,3 +87,17 @@ def back_to_driver_kb():
     builder.button(text='🔙 Назад в меню')
 
     return builder.as_markup(resize_keyboard=True)
+
+
+def driver_report_select_date():
+    """
+        Выбор определённого периода для отчёта водителя.
+    """
+
+    builder = ReplyKeyboardBuilder()
+    builder.button(text="Текущий день")
+    builder.button(text="За месяц")
+    builder.button(text="🔙 Назад")
+    builder.adjust(2, 1)
+
+    return builder.as_markup(resize_keyboard=True)
