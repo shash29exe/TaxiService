@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 
-from keyboards.reply import income_menu_kb, back_button_kb
+from keyboards.reply import income_menu_kb, back_button_kb, driver_menu_kb
 from services.google_sheets import add_record
 
 router = Router()
@@ -99,3 +99,12 @@ async def back_one_step(message: Message, state: FSMContext):
 
     await state.clear()
     await message.answer('Выберите тип дохода', reply_markup=income_menu_kb())
+
+
+@router.message(F.text == '🔙 Назад')
+async def clear_state_and_back(message: Message, state: FSMContext):
+    """
+        Возврат на шаг назад.
+    """
+    await state.clear()
+    await message.answer('Главное меню', reply_markup=driver_menu_kb())
