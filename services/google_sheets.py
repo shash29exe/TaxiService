@@ -45,3 +45,7 @@ def add_record(record_type:str, subcategory:str, amount:float, comment:str, user
     ]
 
     sheet.append_row(row, value_input_option='USER_ENTERED')
+
+
+def get_records_by_day(telegram_id, today):
+    pass
