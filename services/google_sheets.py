@@ -47,5 +47,18 @@ def add_record(record_type:str, subcategory:str, amount:float, comment:str, user
     sheet.append_row(row, value_input_option='USER_ENTERED')
 
 
-def get_records_by_day(telegram_id, today):
-    pass
+def get_records_by_day(user_id:int, date:str):
+    """
+        Получение отчёта за день.
+    """
+
+    rows = sheet.get_all_values()[1:]
+    filtered_rows = []
+
+    for row in rows:
+        row_date = row[0]
+        row_user_id = row[6]
+        if row_date == date and str(user_id) == row_user_id:
+            filtered_rows.append(row)
+
+    return filtered_rows
