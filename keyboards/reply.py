@@ -101,3 +101,18 @@ def driver_report_select_date():
     builder.adjust(2, 1)
 
     return builder.as_markup(resize_keyboard=True)
+
+
+def admin_summary_kb():
+    """
+        Выбор периода для отчёта.
+    """
+
+    builder = ReplyKeyboardBuilder()
+    builder.button(text="Сегодня")
+    builder.button(text="Этот месяц")
+    builder.button(text="Всё время")
+    builder.button(text="↩️ Назад")
+    builder.adjust(3, 1)
+
+    return builder.as_markup(resize_keyboard=True)
