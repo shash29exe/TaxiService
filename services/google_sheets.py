@@ -79,3 +79,7 @@ def get_records_by_month(user_id:int, month:int, year:int):
             filtered_rows.append(row)
 
     return filtered_rows
+
+
+def get_admin_summary(period:str):
+    pass

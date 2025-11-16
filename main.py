@@ -4,6 +4,7 @@ import logging
 
 from config import TOKEN
 from handlers import start
+from handlers.admin import h01_summary
 from handlers.driver import h01_income, h02_expense, h03_report
 
 logging.basicConfig(level=logging.INFO)
@@ -15,6 +16,8 @@ dp.include_router(start.router)
 dp.include_router(h01_income.router)
 dp.include_router(h02_expense.router)
 dp.include_router(h03_report.router)
+
+dp.include_router(h01_summary.router)
 
 
 async def main():
