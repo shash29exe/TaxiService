@@ -24,27 +24,27 @@ async def today_summary(message: Message):
     """
 
     report = get_admin_summary('day')
-    await message.answer(f'Отчёт за сегодня:\n {report}')
+    await message.answer(f'Отчёт за сегодня:\n{report}')
 
 
-@router.message(F.text == 'За месяц')
+@router.message(F.text == 'Этот месяц')
 async def month_summary(message: Message):
     """
         Отчёт за месяц.
     """
 
     report = get_admin_summary('month')
-    await message.answer(f'Отчёт за месяц:\n {report}')
+    await message.answer(f'Отчёт за месяц:\n{report}')
 
 
-@router.message(F.text == 'За всё время')
+@router.message(F.text == 'Всё время')
 async def all_summary(message: Message):
     """
         Отчёт за всё время.
     """
 
     report = get_admin_summary('all')
-    await message.answer(f'Отчёт за всё время:\n {report}')
+    await message.answer(f'Отчёт за всё время:\n{report}')
 
 
 @router.message(F.text == '↩️ Назад')
