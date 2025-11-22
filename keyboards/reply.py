@@ -116,3 +116,17 @@ def admin_summary_kb():
     builder.adjust(3, 1)
 
     return builder.as_markup(resize_keyboard=True)
+
+
+def admin_export_kb():
+    """
+        Выгрузка данных за определённый период
+    """
+
+    builder = ReplyKeyboardBuilder()
+    builder.button(text="📆 За день")
+    builder.button(text="📆 За месяц")
+    builder.button(text="📆 За всё время")
+    builder.button(text="↩️ Назад")
+    builder.adjust(3, 1)
+    return builder.as_markup(resize_keyboard=True)

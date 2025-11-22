@@ -27,7 +27,8 @@ SPREADSHEET_NAME = "TaxiService"
 spreadsheet = client.open(SPREADSHEET_NAME)
 sheet = spreadsheet.sheet1
 
-def add_record(record_type:str, subcategory:str, amount:float, comment:str, user_id:int, username:str):
+
+def add_record(record_type: str, subcategory: str, amount: float, comment: str, user_id: int, username: str):
     """
         Добавление записи google sheets.
     """
@@ -47,7 +48,7 @@ def add_record(record_type:str, subcategory:str, amount:float, comment:str, user
     sheet.append_row(row, value_input_option='USER_ENTERED')
 
 
-def get_records_by_day(user_id:int, date:str):
+def get_records_by_day(user_id: int, date: str):
     """
         Получение отчёта за день.
     """
@@ -64,7 +65,7 @@ def get_records_by_day(user_id:int, date:str):
     return filtered_rows
 
 
-def get_records_by_month(user_id:int, month:int, year:int):
+def get_records_by_month(user_id: int, month: int, year: int):
     """
         Получение отчёта за месяц.
     """
@@ -81,7 +82,7 @@ def get_records_by_month(user_id:int, month:int, year:int):
     return filtered_rows
 
 
-def get_admin_summary(period:str):
+def get_admin_summary(period: str):
     """
         Возможность получить отчёты по всем пользователям за все периоды
     """
@@ -132,6 +133,15 @@ def get_admin_summary(period:str):
         total_income += data['income']
         total_expense += data['expense']
 
-    lines.append(f'\nОбщий итог:\nДоход: {total_income}₽\nРасход: {total_expense}₽\n\nПрибыль: {total_income-total_expense:.2f}₽')
+    lines.append(
+        f'\nОбщий итог:\nДоход: {total_income}₽\nРасход: {total_expense}₽\n\nПрибыль: {total_income - total_expense:.2f}₽')
 
     return '\n'.join(lines) if lines else 'Нет данных за выбранный период'
+
+
+def get_all_data():
+    """
+        Получение всех данных из таблицы
+    """
+
+    return sheet.get_all_values()
