@@ -35,14 +35,17 @@ async def export_period(message: Message):
     if period_text == "📆 За день":
         df = df[df['дата'] == now.strftime('%d.%m.%Y')]
         file_name = f'export_day_{now.strftime("%Y-%m-%d")}.xlsx'
+        file_caption = 'день'
 
     elif period_text == "📆 За месяц":
         month_year = now.strftime('%m.%Y')
         df = df[df['дата'].str.endswith(month_year)]
         file_name = f'export_month_{now.strftime("%Y-%m")}.xlsx'
+        file_caption = 'месяц'
 
     else:
         file_name = f'export_all_{now.strftime("%Y-%m-%d")}.xlsx'
+        file_caption = 'всё время'
 
     if df.empty:
         await message.answer('Нет данных за выбранный период')
@@ -63,4 +66,4 @@ async def export_period(message: Message):
         summary.rename(columns = {'сумма': 'итоги'}, inplace = True)
         summary.to_excel(writer, sheet_name='сводка', index=False)
 
-    await message.answer_document(FSInputFile(file_name), caption=f'Выгрузка за {period_text}')
+    await message.answer_document(FSInputFile(file_name), caption=f'Выгрузка за {file_caption}')
