@@ -1,9 +1,9 @@
 import pandas as pd
 from aiogram import Router, F
-from aiogram.types import Message, FSInputFile, ReplyKeyboardRemove
+from aiogram.types import Message, FSInputFile
 from datetime import datetime
 
-from keyboards.reply import admin_menu_kb, admin_export_kb
+from keyboards.reply import admin_export_kb
 from services.google_sheets import get_all_data
 
 router = Router()
@@ -35,3 +35,32 @@ async def export_period(message: Message):
     if period_text == "📆 За день":
         df = df[df['дата'] == now.strftime('%d.%m.%Y')]
         file_name = f'export_day_{now.strftime("%Y-%m-%d")}.xlsx'
+
+    elif period_text == "📆 За месяц":
+        month_year = now.strftime('%m.%Y')
+        df = df[df['дата'].str.endswith(month_year)]
+        file_name = f'export_month_{now.strftime("%Y-%m")}.xlsx'
+
+    else:
+        file_name = f'export_all_{now.strftime("%Y-%m-%d")}.xlsx'
+
+    if df.empty:
+        await message.answer('Нет данных за выбранный период')
+        return
+
+    with pd.ExcelWriter(file_name, engine='xlsxwriter') as writer:
+        df.to_excel(writer, sheet_name='Все записи', index=False)
+
+        for user, user_df in df.groupby('имя'):
+            user_df.to_excel(writer, sheet_name=str(user)[:31], index=False)
+
+        summary = (
+            df.groupby('имя')['сумма']
+            .apply(lambda x: pd.to_numeric(x, errors='coerce').sum())
+            .reset_index()
+        )
+
+        summary.rename(columns = {'сумма': 'итоги'}, inplace = True)
+        summary.to_excel(writer, sheet_name='сводка', index=False)
+
+    await message.answer_document(FSInputFile(file_name), caption=f'Выгрузка за {period_text}')
