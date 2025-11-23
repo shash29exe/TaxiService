@@ -2,12 +2,15 @@ import pandas as pd
 from aiogram import Router, F
 from aiogram.types import Message, FSInputFile
 from datetime import datetime
+import os
 
 from keyboards.reply import admin_export_kb
 from services.google_sheets import get_all_data
 
 router = Router()
 
+folder_name = 'export'
+os.makedirs(folder_name, exist_ok=True)
 
 @router.message(F.text == "Выгрузка")
 async def export_menu(message: Message):
@@ -51,7 +54,9 @@ async def export_period(message: Message):
         await message.answer('Нет данных за выбранный период')
         return
 
-    with pd.ExcelWriter(file_name, engine='xlsxwriter') as writer:
+    file_path = os.path.join(folder_name, file_name)
+
+    with pd.ExcelWriter(file_path, engine='xlsxwriter') as writer:
         df.to_excel(writer, sheet_name='Все записи', index=False)
 
         for user, user_df in df.groupby('имя'):
@@ -66,4 +71,4 @@ async def export_period(message: Message):
         summary.rename(columns = {'сумма': 'итоги'}, inplace = True)
         summary.to_excel(writer, sheet_name='сводка', index=False)
 
-    await message.answer_document(FSInputFile(file_name), caption=f'Выгрузка за {file_caption}')
+    await message.answer_document(FSInputFile(file_path), caption=f'Выгрузка за {file_caption}')
