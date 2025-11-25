@@ -1,14 +1,11 @@
 import json
 from datetime import datetime
-# import os
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 from config import GOOGLE_CREDENTIALS_PATH
 
-# base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# credential_path = os.path.join(base_dir, 'services', 'creds', 'credentials.json')
 
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 
