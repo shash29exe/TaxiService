@@ -2,14 +2,14 @@ from aiogram.types import KeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardMarkup, ReplyKeyboardBuilder
 
 
-def get_id_kb():
+def pass_button():
     """
-        Получение ID пользователя.
+        Удаление кнопки
     """
 
-    return ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text="Получить ID")]], resize_keyboard=True
-    )
+    builder = ReplyKeyboardBuilder()
+    builder.button(text='')
+    return builder.as_markup(resize_keyboard=True)
 
 
 def admin_menu_kb():

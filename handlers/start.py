@@ -1,7 +1,11 @@
 from aiogram.types import Message
 from aiogram import F, Router
+from zoneinfo import ZoneInfo
+import uuid
 
-from keyboards.reply import get_id_kb, driver_menu_kb, admin_menu_kb, contact_admin_kb
+from keyboards.inline import add_driver_with_token
+from keyboards.reply import driver_menu_kb, admin_menu_kb, contact_admin_kb
+from services.request_store import save_request
 from utils.auth import check_admin, check_drivers, get_admin_id
 
 router = Router()
@@ -13,19 +17,7 @@ async def start(message: Message):
         Реакция на команду /start.
     """
 
-    await message.answer("Получите ваш ID", reply_markup=get_id_kb())
-
-
-
-
-@router.message(F.text == 'Получить ID')
-async def get_id(message: Message):
-    """
-        Получение ID пользователя.
-    """
-
     user_id = message.from_user.id
-
     if check_admin(user_id):
         await message.answer("Привет, admin.", reply_markup=admin_menu_kb())
 
@@ -33,11 +25,29 @@ async def get_id(message: Message):
         await message.answer("Привет, водитель.", reply_markup=driver_menu_kb())
 
     else:
-        tg_id = message.from_user.id
-        await message.answer(f'Ваш ID: {tg_id}\nДля работы бота свяжитесь с администратором.',
-                             reply_markup=contact_admin_kb(),
-                             parse_mode="Markdown"
-                             )
+        await message.answer('У вас нет доступа. Свяжитесь с администратором', reply_markup=contact_admin_kb())
+
+
+# @router.message(F.text == 'Получить ID')
+# async def get_id(message: Message):
+#     """
+#         Получение ID пользователя.
+#     """
+#
+#     user_id = message.from_user.id
+#
+#     if check_admin(user_id):
+#         await message.answer("Привет, admin.", reply_markup=admin_menu_kb())
+#
+#     elif check_drivers(user_id):
+#         await message.answer("Привет, водитель.", reply_markup=driver_menu_kb())
+#
+#     else:
+#         tg_id = message.from_user.id
+#         await message.answer(f'Ваш ID: {tg_id}\nДля работы бота свяжитесь с администратором.',
+#                              reply_markup=contact_admin_kb(),
+#                              parse_mode="Markdown"
+#                              )
 
 
 @router.message(F.text == '💬 Связаться с менеджером')
@@ -46,17 +56,23 @@ async def contact_admin(message: Message):
         Связь с менеджером
     """
 
-    username = message.from_user.username
+    full_name = message.from_user.full_name or 'Нет имени'
+    user_name = '@' + message.from_user.username or 'Нет имя пользователя'
     user_id = message.from_user.id
+
+    local_time = message.date.astimezone(ZoneInfo('Asia/Yekaterinburg'))
 
     admin_message = (
         f'🔔 Вам пришло уведомление\n'
-        f'👤 От: {username}\n'
+        f'👤 От: {full_name}, {user_name}\n'
         f'🆔 ID: {user_id}\n'
-        f'🕑 Дата и время: {message.date.strftime("%d/%m/%Y %H:%M")}\n'
+        f'🕑 Дата и время: {local_time.strftime("%d/%m/%Y %H:%M")}\n'
     )
+
+    token = uuid.uuid4().hex
+    save_request(token, {'user_id': user_id, 'full_name': full_name, 'user_name': user_name})
 
     admin_id = get_admin_id()
 
-    await message.bot.send_message(admin_id, admin_message)
-    await message.answer('📨 Ваше сообщение отправленно администратору, ожидайте обратную связь.')
+    await message.bot.send_message(admin_id, admin_message, reply_markup=add_driver_with_token(token, user_name))
+    await message.answer('📨 Ваше сообщение отправленно администратору, ожидайте обратную связь.' reply_markup=)
