@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 import uuid
 
 from keyboards.inline import add_driver_with_token
-from keyboards.reply import driver_menu_kb, admin_menu_kb, contact_admin_kb
+from keyboards.reply import driver_menu_kb, admin_menu_kb, contact_admin_kb, pass_button
 from services.request_store import save_request
 from utils.auth import check_admin, check_drivers, get_admin_id
 
@@ -75,4 +75,4 @@ async def contact_admin(message: Message):
     admin_id = get_admin_id()
 
     await message.bot.send_message(admin_id, admin_message, reply_markup=add_driver_with_token(token, user_name))
-    await message.answer('📨 Ваше сообщение отправленно администратору, ожидайте обратную связь.' reply_markup=)
+    await message.answer('📨 Ваше сообщение отправленно администратору, ожидайте обратную связь.', reply_markup=pass_button())

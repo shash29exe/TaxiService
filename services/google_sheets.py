@@ -4,6 +4,7 @@ from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+import config
 from config import GOOGLE_CREDENTIALS_PATH
 
 
@@ -43,6 +44,7 @@ def add_record(record_type: str, subcategory: str, amount: float, comment: str, 
     ]
 
     sheet.append_row(row, value_input_option='USER_ENTERED')
+    update_drivers_in_config()
 
 
 def get_records_by_day(user_id: int, date: str):
@@ -142,3 +144,52 @@ def get_all_data():
     """
 
     return sheet.get_all_values()
+
+
+def update_drivers_in_config():
+    """
+        Актуализация списка водителей.
+    """
+
+    try:
+        current_drivers = get_drivers_from_sheets()
+        if not isinstance(config.DRIVERS_ID, list):
+            config.DRIVERS_ID = []
+
+        merged = set(config.DRIVERS_ID) | set(current_drivers)
+        config.DRIVERS_ID[:] = sorted(list(merged))
+
+        print(f'Список водителей обновлён.\n{config.DRIVERS_ID}')
+
+        return config.DRIVERS_ID
+
+    except Exception as e:
+        print(f'Ошибка при обновлении водителей:\n{e}')
+
+        return []
+
+def get_drivers_from_sheets():
+    """
+        Получение ID водителей
+    """
+
+    try:
+        all_data = sheet.get_all_values()
+        if len(all_data) <= 1:
+            return []
+
+        drivers_ids = list()
+        for row in all_data[1:]:
+            try:
+                if len(row) > 6 and row[6].strip():
+                    telegram_id = int(row[6].strip())
+                    drivers_ids.append(telegram_id)
+
+            except Exception:
+                continue
+
+        return sorted(list(drivers_ids))
+
+    except Exception as e:
+        print(f'Ошибка при получении списка водителей:\n{e}')
+        return []

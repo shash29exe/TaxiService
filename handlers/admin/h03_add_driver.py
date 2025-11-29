@@ -8,7 +8,7 @@ from services.request_store import get_request, remove_requests
 router = Router()
 
 
-@router.callback_query(F.data.startswith("add_driver"))
+@router.callback_query(F.data.startswith("add_driver:"))
 async def add_driver_callback(callback: CallbackQuery):
     """
         Добавление водителя через инлайн кнопку
@@ -22,7 +22,7 @@ async def add_driver_callback(callback: CallbackQuery):
         return
 
     driver_id = data['user_id']
-    driver_name = data['username']
+    driver_name = data['user_name']
 
     add_record(
         user_id=driver_id,

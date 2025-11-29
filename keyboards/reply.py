@@ -8,7 +8,7 @@ def pass_button():
     """
 
     builder = ReplyKeyboardBuilder()
-    builder.button(text='')
+    builder.button(text='Дождитесь соединения с сервисом.')
     return builder.as_markup(resize_keyboard=True)
 
 
