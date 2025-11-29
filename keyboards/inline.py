@@ -6,7 +6,7 @@ def add_driver_with_token(token: str, driver_name: str):
         Кнопка добавления водителя.
    """
 
-   callback_data = f'add_driver_{token}'
+   callback_data = f'add_driver:{token}'
 
    return InlineKeyboardMarkup(
        inline_keyboard=[
