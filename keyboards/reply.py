@@ -20,9 +20,8 @@ def admin_menu_kb():
     builder = ReplyKeyboardBuilder()
     builder.button(text='Сводный отчёт')
     builder.button(text='Выгрузка')
-    builder.button(text='Добавить водителя')
     builder.button(text='Удалить водителя')
-    builder.adjust(2, 2)
+    builder.adjust(2, 1)
 
     return builder.as_markup(resize_keyboard=True)
 
