@@ -1,7 +1,12 @@
+from idlelib.replace import replace
+
 from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import Message
+from aiogram.types import Message, ReplyKeyboardRemove
+
+from keyboards.reply import contact_admin_kb
+from services.google_sheets import add_record
 
 router = Router()
 
@@ -28,12 +33,23 @@ async def remove_driver(message: Message, state: FSMContext):
         Удаление водителя
     """
 
-    tg_id = message.text
-    print(tg_id)
+    try:
+        driver_id = int(message.text)
 
-    """
-        TODO: доделать удаление из гугл таблиц.
-    """
+    except ValueError:
+        await message.answer('Вы ввели некоректный ID.')
+        return
 
-    await message.answer(f'🗑️ Водитель с ID {tg_id} удалён')
+    add_record(
+        user_id=driver_id,
+        username='удалённый водитель',
+        record_type='водитель',
+        subcategory='удаление',
+        amount=0,
+        comment='удаление водителя'
+    )
+
+
+    await message.answer(f'🗑️ Водитель с ID {driver_id} удалён')
+    await message.bot.send_message(driver_id, 'Доступ запрещён.', reply_markup=contact_admin_kb())
     await state.clear()
