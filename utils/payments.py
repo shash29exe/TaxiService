@@ -3,15 +3,15 @@ import uuid
 import aiohttp
 from typing import Dict
 
-YOOKASSA_API='https://api.yookassa.ru/v3'
-SHOP_ID=os.getenv('YOOKASSA_SHOP_ID')
-SECRET_KEY=os.getenv('YOOKASSA_SECRET_KEY')
-RETURN_URL=os.getenv('YOOKASSA_RETURN_URL')
+YOOKASSA_API = 'https://api.yookassa.ru/v3'
+SHOP_ID = os.getenv('YOOKASSA_SHOP_ID')
+SECRET_KEY = os.getenv('YOOKASSA_SECRET_KEY')
+RETURN_URL = os.getenv('YOOKASSA_RETURN_URL')
 
-pending_payments:Dict[str,dict]={}
+pending_payments: Dict[str, dict] = {}
 
 
-async def create_payment(amount:float, description:str, user_id:int, username:str):
+async def create_payment(amount: float, description: str, user_id: int, username: str):
     """
         Метод создания платежа
     """
