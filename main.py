@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher
 import logging
 
 from config import TOKEN
-from handlers import start
+from handlers import start, payment
 from handlers.admin import h01_summary, h02_export, h03_add_driver, h04_remove_driver
 from handlers.driver import h01_income, h02_expense, h03_report
 
@@ -13,6 +13,7 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 dp.include_router(start.router)
+dp.include_router(payment.router)
 dp.include_router(h01_income.router)
 dp.include_router(h02_expense.router)
 dp.include_router(h03_report.router)
