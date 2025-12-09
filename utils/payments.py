@@ -17,6 +17,7 @@ async def create_payment(amount: float, description: str, user_id: int, username
     """
 
     idempotency_key = str(uuid.uuid4())
+    print(idempotency_key, SHOP_ID, SECRET_KEY)
     payload = {
         'amount': {'value': f'{amount:.2f}', 'currency': 'RUB'},
         'confirmation': {'type': 'redirect', 'return_url': RETURN_URL},
@@ -27,7 +28,7 @@ async def create_payment(amount: float, description: str, user_id: int, username
     auth = aiohttp.BasicAuth(login=SHOP_ID, password=SECRET_KEY)
 
     async with aiohttp.ClientSession(auth=auth) as session:
-        headers = {'Idempotency-Key': idempotency_key, 'Accept': 'application/json'}
+        headers = {'Idempotence-Key': idempotency_key, 'Accept': 'application/json'}
 
         async with session.post(f'{YOOKASSA_API}/payments', json=payload, headers=headers) as resp:
             data = await resp.json()
