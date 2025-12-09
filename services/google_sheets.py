@@ -193,3 +193,7 @@ def get_drivers_from_sheets():
     except Exception as e:
         print(f'Ошибка при получении списка водителей:\n{e}')
         return []
+
+
+def remove_driver_from_sheet(user_id):
+    pass
