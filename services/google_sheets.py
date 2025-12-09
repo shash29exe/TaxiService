@@ -195,5 +195,33 @@ def get_drivers_from_sheets():
         return []
 
 
-def remove_driver_from_sheet(user_id):
-    pass
+def remove_driver_from_sheet(driver_id):
+    try:
+        all_data = sheet.get_all_values()
+        if len(all_data) <= 1:
+            return False
+
+        rows_to_delete = []
+
+        for i, row in enumerate(all_data[1:], start=2):
+            try:
+                if len(row) > 6 and int(row[6]) == driver_id:
+                    rows_to_delete.append(i)
+
+            except (IndexError, ValueError):
+                continue
+
+        if not rows_to_delete:
+            print(f'User ID {driver_id} not found')
+            return False
+
+        for row_index in reversed(rows_to_delete):
+            sheet.delete_rows(row_index)
+
+        print(f'User deleted {driver_id}, {rows_to_delete}')
+        update_drivers_in_config()
+        return True
+
+    except Exception as e:
+        print('Ошибка при удалении')
+        return False
