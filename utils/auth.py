@@ -1,4 +1,5 @@
 from config import ADMIN_ID, DRIVERS_ID
+from services.google_sheets import get_drivers_from_sheets
 
 
 def check_admin(user_id: int):
@@ -11,13 +12,15 @@ def check_admin(user_id: int):
 
 def check_drivers(user_id: int):
     """
-        Проверка на админа.
+        Проверка id водителя на наличие в googlesheets.
     """
 
-    return user_id in DRIVERS_ID
+    allowed_users = get_drivers_from_sheets()
+
+    return user_id in allowed_users
 
 def get_admin_id():
     """
-        Получение adminid
+        Получение admin_id
     """
     return ADMIN_ID
