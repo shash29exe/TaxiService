@@ -7,7 +7,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 import config
 from config import GOOGLE_CREDENTIALS_PATH
 
-
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 
 with open(GOOGLE_CREDENTIALS_PATH, 'r') as f:
@@ -168,6 +167,7 @@ def update_drivers_in_config():
 
         return []
 
+
 def get_drivers_from_sheets():
     """
         Получение ID водителей
@@ -178,14 +178,12 @@ def get_drivers_from_sheets():
         if len(all_data) <= 1:
             return []
 
-        drivers_ids = list()
+        drivers_ids = set()
         for row in all_data[1:]:
             try:
                 if len(row) > 6 and row[6].strip():
-                    telegram_id = int(row[6].strip())
-                    drivers_ids.append(telegram_id)
-
-            except Exception:
+                    drivers_ids.add(int(row[6].strip()))
+            except IndexError:
                 continue
 
         return sorted(list(drivers_ids))
