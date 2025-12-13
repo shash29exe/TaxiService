@@ -6,11 +6,15 @@ from config import TOKEN
 from handlers import start, payment
 from handlers.admin import h01_summary, h02_export, h03_add_driver, h04_remove_driver
 from handlers.driver import h01_income, h02_expense, h03_report
+from middleware.check_driver import CheckDriverMiddleware
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
+
+dp.message.middleware(CheckDriverMiddleware())
+dp.callback_query.middleware(CheckDriverMiddleware())
 
 dp.include_router(start.router)
 dp.include_router(payment.router)
