@@ -28,28 +28,6 @@ async def start(message: Message):
         await message.answer('У вас нет доступа. Свяжитесь с администратором', reply_markup=contact_admin_kb())
 
 
-# @router.message(F.text == 'Получить ID')
-# async def get_id(message: Message):
-#     """
-#         Получение ID пользователя.
-#     """
-#
-#     user_id = message.from_user.id
-#
-#     if check_admin(user_id):
-#         await message.answer("Привет, admin.", reply_markup=admin_menu_kb())
-#
-#     elif check_drivers(user_id):
-#         await message.answer("Привет, водитель.", reply_markup=driver_menu_kb())
-#
-#     else:
-#         tg_id = message.from_user.id
-#         await message.answer(f'Ваш ID: {tg_id}\nДля работы бота свяжитесь с администратором.',
-#                              reply_markup=contact_admin_kb(),
-#                              parse_mode="Markdown"
-#                              )
-
-
 @router.message(F.text == '💬 Связаться с менеджером')
 async def contact_admin(message: Message):
     """
@@ -57,7 +35,7 @@ async def contact_admin(message: Message):
     """
 
     full_name = message.from_user.full_name or 'Нет имени'
-    user_name = '@' + message.from_user.username or 'Нет имя пользователя'
+    user_name = f'@{message.from_user.username}' or 'Нет имя пользователя'
     user_id = message.from_user.id
 
     local_time = message.date.astimezone(ZoneInfo('Asia/Yekaterinburg'))
@@ -75,4 +53,5 @@ async def contact_admin(message: Message):
     admin_id = get_admin_id()
 
     await message.bot.send_message(admin_id, admin_message, reply_markup=add_driver_with_token(token, user_name))
-    await message.answer('📨 Ваше сообщение отправленно администратору, ожидайте обратную связь.', reply_markup=pass_button())
+    await message.answer('📨 Ваше сообщение отправленно администратору, ожидайте обратную связь.',
+                         reply_markup=pass_button())

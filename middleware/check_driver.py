@@ -47,7 +47,13 @@ class CheckDriverMiddleware(BaseMiddleware):
                 if hasattr(event, 'answer'):
                     await event.answer('У вас нет доступа. Свяжитесь с менеджером.', reply_markup=contact_admin_kb())
 
-            # TODO: Дописать логику
-            except Exception as e:
+                elif hasattr(event, 'message') and hasattr(event.message, 'answer'):
+                    await event.message.answer('У вас нет доступа.', reply_markup=contact_admin_kb())
+
+            except:
                 pass
+
+            return
+
+        return await handler(event, data)
 
